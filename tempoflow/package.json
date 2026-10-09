@@ -1,0 +1,26 @@
+{
+  "name": "tempoflow-protocol",
+  "version": "1.0.0",
+  "description": "TempoFlow: The Sub-Second Programmable Stablecoin Highway on Tempo L1 & Solana Ingress",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:coverage": "hardhat coverage"
+  },
+  "keywords": [
+    "tempo",
+    "solana",
+    "stablecoins",
+    "streaming-payments",
+    "evm",
+    "defi",
+    "colosseum"
+  ],
+  "author": "TempoFlow Core Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.29.1"
+  }
+}
