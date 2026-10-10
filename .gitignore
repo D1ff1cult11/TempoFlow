@@ -5,14 +5,14 @@ yarn-debug.log*
 yarn-error.log*
 
 # Hardhat & EVM
-tempoflow/artifacts/
-tempoflow/cache/
-tempoflow/typechain/
-tempoflow/typechain-types/
+artifacts/
+cache/
+typechain/
+typechain-types/
 
 # Rust / Cargo / Anchor
 target/
-tempoflow/solana-ingress/target/
+solana-ingress/target/
 **/*.rs.bk
 .anchor/
 

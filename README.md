@@ -100,7 +100,6 @@
 
 ### 1. Run Automated Test Suite (100% Green)
 ```bash
-cd tempoflow
 npm install
 npx hardhat test
 ```
