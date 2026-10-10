@@ -10,6 +10,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Hackathon](https://img.shields.io/badge/Colosseum-Crypto%20World's%20Fair%202026-F97316)](https://arena.colosseum.org)
 
+<p align="center">
+  <img src="assets/tempoflow_hero_banner.jpg" alt="TempoFlow Hero Banner" width="100%" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0, 210, 106, 0.2);" />
+</p>
+
 > 🚀 **Live Production Terminal**: [**https://tempoflow.vercel.app/**](https://tempoflow.vercel.app/)  
 > *(One-Click Judge Demo Mode: zero wallet or faucet tokens required. Instant 15-second settlement simulation with audio feedback & confetti).*
 
