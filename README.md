@@ -2,12 +2,16 @@
 
 > **The Sub-Second Programmable Stablecoin Highway: Cross-Chain Instant Settlement, Streaming Payroll & Enshrined FX on Tempo L1.**
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-tempoflow.vercel.app-00F0FF?style=for-the-badge&logo=vercel)](https://tempoflow.vercel.app/)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.24-363636?logo=solidity)](https://soliditylang.org/)
 [![Tempo L1](https://img.shields.io/badge/Network-Tempo%20L1%20Testnet-00D26A)](https://tempo.xyz)
 [![Solana Anchor](https://img.shields.io/badge/Solana-Anchor%200.30-9945FF?logo=solana)](https://anchor-lang.com)
 [![Tests](https://img.shields.io/badge/Tests-10%2F10%20Passing-brightgreen)](https://hardhat.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Hackathon](https://img.shields.io/badge/Colosseum-Crypto%20World's%20Fair%202026-F97316)](https://arena.colosseum.org)
+
+> 🚀 **Live Production Terminal**: [**https://tempoflow.vercel.app/**](https://tempoflow.vercel.app/)  
+> *(One-Click Judge Demo Mode: zero wallet or faucet tokens required. Instant 15-second settlement simulation with audio feedback & confetti).*
 
 ---
 
@@ -129,6 +133,22 @@ npx hardhat test
 ```bash
 npx hardhat run scripts/deploy.js --network tempoTestnet
 ```
+
+### 3. Launch Web3 Terminal (One-Click Judge Demo Mode)
+```bash
+# Option A: From root directory
+npm run frontend:dev
+
+# Option B: From frontend directory
+cd frontend
+npm install
+npm run dev
+```
+
+> **⭐ Judge Evaluation Note**:
+> The frontend launches in **One-Click Judge Demo Mode** by default. Judges can test sub-second settlement, continuous time-warp payroll, and Enshrined FX swaps instantly via the top banner buttons with **zero wallet, faucet, or network friction**.
+> 
+> To test live on-chain interactions, click the **"Mode Switcher"** in the top navigation bar to toggle to **Live Web3 Mode**, connect MetaMask/Phantom, and use the built-in **1-Click Testnet Faucet** to mint tokens on Tempo L1 Testnet (Chain ID `4242`).
 
 ---
 

@@ -168,10 +168,11 @@ Copy and adapt these exact answers when completing your submission on `arena.col
 - **Testing & Tooling**: Foundry (Forge), Anchor Test, GitHub Actions CI/CD
 
 ### 7. Traction & Live Demo Links
-- **Live Interactive Web App**: `https://tempoflow.xyz` (or Vercel deployment link)
-- **GitHub Repository**: `https://github.com/[your-username]/tempoflow`
-- **Tempo Explorer Contract**: `0x...` (Verified contract link)
-- **Solana Devnet Program**: `TempoF1owIngress...`
+- **Live Interactive Web App**: `https://tempoflow.vercel.app/`
+- **GitHub Repository**: `https://github.com/D1ff1cult11/TempoFlow`
+- **Tempo Testnet Router**: `0x0165878A594ca255338adfa4d48449f69242Eb8F`
+- **Tempo Testnet Payroll**: `0xa513E6E4b8f2a923D98304ec87F64353C4D5C853`
+- **Solana Devnet Program**: `TempoF1owIngress111111111111111111111111111`
 
 ---
 
