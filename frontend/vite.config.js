@@ -10,5 +10,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'ethers-vendor': ['ethers'],
+          'lucide-vendor': ['lucide-react'],
+          'confetti-vendor': ['canvas-confetti'],
+        },
+      },
+    },
   },
 });

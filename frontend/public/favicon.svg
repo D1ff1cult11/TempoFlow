@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00D26A"/>
+      <stop offset="100%" stop-color="#00F0FF"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Rounded square background -->
+  <rect width="48" height="48" rx="12" fill="url(#bg-grad)"/>
+  <!-- Lightning bolt (Zap icon) -->
+  <path d="M26 6L14 26h10l-2 16 16-22H28l2-14z" fill="#06080D" stroke="#06080D" stroke-width="0.5" stroke-linejoin="round" filter="url(#glow)"/>
+</svg>

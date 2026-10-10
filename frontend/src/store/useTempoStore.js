@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { sound } from '../audio/soundEffects';
-import { CONTRACT_ADDRESSES, ERC20_ABI, ROUTER_ABI, PAYROLL_ABI, NETWORK_CONFIG } from '../config/contracts';
+import { CONTRACT_ADDRESSES, ERC20_ABI, ROUTER_ABI, PAYROLL_ABI, VAULT_ABI, NETWORK_CONFIG } from '../config/contracts';
 import { ethers } from 'ethers';
 
 // Global singleton state for React components
@@ -63,6 +63,9 @@ let state = {
 
   // Live modal receipt
   activeReceipt: null,
+
+  // Vault UI loading flag
+  isVaultLoading: false,
 };
 
 const listeners = new Set();
@@ -235,6 +238,121 @@ export function useTempoStore() {
   };
 
   // ==========================================
+  // ACTIONS: TREASURY VAULT
+  // ==========================================
+
+  const withdrawFromVault = async (tokenSymbol = 'USDC') => {
+    if (state.isJudgeMode || !state.connectedAddress || !window.ethereum) {
+      // Demo: move vault funds to wallet balance
+      sound.playCashChime();
+      if (tokenSymbol === 'USDC') {
+        state.walletBalanceUSDC += state.merchantVaultUSDC;
+        state.merchantVaultUSDC = 0;
+      } else {
+        state.walletBalanceEURC += state.merchantVaultEURC;
+        state.merchantVaultEURC = 0;
+      }
+      confetti({ particleCount: 60, spread: 60, origin: { y: 0.6 }, colors: ['#00D26A', '#00F0FF'] });
+      emit();
+      return;
+    }
+
+    try {
+      state.isVaultLoading = true;
+      emit();
+      sound.playClick();
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const vault = new ethers.Contract(CONTRACT_ADDRESSES.MerchantSettlementVault, VAULT_ABI, signer);
+      const tokenAddress = tokenSymbol === 'USDC' ? CONTRACT_ADDRESSES.USDC : CONTRACT_ADDRESSES.EURC;
+
+      // Read on-chain balance first
+      const rawBalance = await vault.getBalance(tokenAddress);
+      if (rawBalance === 0n) {
+        alert(`No ${tokenSymbol} balance in vault to withdraw.`);
+        state.isVaultLoading = false;
+        emit();
+        return;
+      }
+
+      const tx = await vault.withdraw(tokenAddress, rawBalance, state.connectedAddress);
+      await tx.wait();
+
+      const humanBalance = parseFloat(ethers.formatUnits(rawBalance, 6));
+      if (tokenSymbol === 'USDC') {
+        state.walletBalanceUSDC += humanBalance;
+        state.merchantVaultUSDC = 0;
+      } else {
+        state.walletBalanceEURC += humanBalance;
+        state.merchantVaultEURC = 0;
+      }
+
+      sound.playCashChime();
+      confetti({ particleCount: 60, spread: 60, origin: { y: 0.6 }, colors: ['#00D26A', '#00F0FF'] });
+    } catch (err) {
+      console.error('Vault withdraw failed:', err);
+      alert('Withdraw failed: ' + (err.reason || err.message));
+    } finally {
+      state.isVaultLoading = false;
+      emit();
+    }
+  };
+
+  const refreshVaultBalances = async () => {
+    if (state.isJudgeMode || !window.ethereum) {
+      // Demo: just flash the loading state
+      state.isVaultLoading = true;
+      emit();
+      await new Promise((r) => setTimeout(r, 600));
+      state.isVaultLoading = false;
+      emit();
+      return;
+    }
+
+    try {
+      state.isVaultLoading = true;
+      emit();
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const vault = new ethers.Contract(CONTRACT_ADDRESSES.MerchantSettlementVault, VAULT_ABI, provider);
+      const usdcAddress = CONTRACT_ADDRESSES.USDC;
+      const eurcAddress = CONTRACT_ADDRESSES.EURC;
+
+      const [rawUSDC, rawEURC] = await Promise.all([
+        vault.getBalance(usdcAddress),
+        vault.getBalance(eurcAddress),
+      ]);
+
+      state.merchantVaultUSDC = parseFloat(ethers.formatUnits(rawUSDC, 6));
+      state.merchantVaultEURC = parseFloat(ethers.formatUnits(rawEURC, 6));
+    } catch (err) {
+      console.error('Vault refresh failed:', err);
+    } finally {
+      state.isVaultLoading = false;
+      emit();
+    }
+  };
+
+  const setMerchantSplitBps = async (bps) => {
+    state.merchantSplitBps = bps;
+    emit();
+
+    if (state.isJudgeMode || !state.connectedAddress || !window.ethereum) return;
+
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const vault = new ethers.Contract(CONTRACT_ADDRESSES.MerchantSettlementVault, VAULT_ABI, signer);
+      // Forward 20% of split to payroll stream contract
+      const tx = await vault.configureAutoForward(CONTRACT_ADDRESSES.TempoPayrollStream, bps);
+      await tx.wait();
+    } catch (err) {
+      console.error('Auto-forward config failed (demo continues):', err);
+    }
+  };
+
+  // ==========================================
   // ACTIONS: LIVE ON-CHAIN WEB3 MODE (MODE B)
   // ==========================================
 
@@ -328,6 +446,9 @@ export function useTempoStore() {
     closeReceipt,
     connectWallet,
     mintTestnetFaucet,
+    withdrawFromVault,
+    refreshVaultBalances,
+    setMerchantSplitBps,
     setSelectedSettleCurrency: (curr) => {
       state.selectedSettleCurrency = curr;
       sound.playClick();

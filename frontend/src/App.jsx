@@ -3,12 +3,13 @@ import { Navbar } from './components/Navbar';
 import { JudgeBanner } from './components/JudgeBanner';
 import { MerchantTerminal } from './components/MerchantTerminal';
 import { PayrollOdometer } from './components/PayrollOdometer';
+import { TreasuryVault } from './components/TreasuryVault';
 import { CrossChainRelay } from './components/CrossChainRelay';
 import { SettlementModal } from './components/SettlementModal';
-import { Store, Timer, ExternalLink, Github, BookOpen, Award } from 'lucide-react';
+import { Store, Timer, ExternalLink, Github, BookOpen, Award, Vault } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('ALL'); // 'ALL' | 'MERCHANT' | 'PAYROLL'
+  const [activeTab, setActiveTab] = useState('ALL'); // 'ALL' | 'MERCHANT' | 'PAYROLL' | 'TREASURY'
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -81,6 +82,14 @@ export default function App() {
                 <Timer size={15} />
                 Payroll Odometer
               </button>
+              <button
+                onClick={() => setActiveTab('TREASURY')}
+                className={activeTab === 'TREASURY' ? 'btn-primary' : 'btn-secondary'}
+                style={{ fontSize: '0.85rem' }}
+              >
+                <Vault size={15} />
+                Treasury Vault
+              </button>
             </div>
           </div>
         </div>
@@ -99,6 +108,12 @@ export default function App() {
           {(activeTab === 'ALL' || activeTab === 'PAYROLL') && (
             <section>
               <PayrollOdometer />
+            </section>
+          )}
+
+          {(activeTab === 'ALL' || activeTab === 'TREASURY') && (
+            <section>
+              <TreasuryVault />
             </section>
           )}
         </div>
