@@ -9,20 +9,99 @@ export function JudgeBanner() {
     simulateTimeWarp,
     simulateFXSwap,
     relayerStep,
+    connectedAddress,
+    connectWallet,
+    mintTestnetFaucet,
+    addTempoNetworkToMetamask,
   } = useTempoStore();
 
   if (!isJudgeMode) {
     return (
       <div style={{
-        background: 'rgba(0, 240, 255, 0.08)',
-        borderBottom: '1px solid rgba(0, 240, 255, 0.25)',
+        background: 'linear-gradient(90deg, rgba(0, 240, 255, 0.12) 0%, rgba(153, 69, 255, 0.12) 100%)',
+        borderBottom: '1px solid rgba(0, 240, 255, 0.3)',
         padding: '10px 24px',
-        textAlign: 'center',
-        fontSize: '0.85rem',
-        color: 'var(--tempo-cyan)',
-        fontFamily: 'var(--font-sans)',
+        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.25)',
       }}>
-        ⚡ <strong>Live Web3 Mode Active</strong>: Connected to Tempo L1 Testnet (ChainId 4242) and Solana Devnet. You can mint testnet stablecoins and sign real on-chain transactions directly!
+        <div style={{
+          maxWidth: '1280px',
+          margin: '0 auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span className="pulse-dot"></span>
+            <div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#FFFFFF', fontFamily: 'var(--font-sans)' }}>
+                ⚡ Live On-Chain Web3 Mode (Tempo L1 Testnet - Chain 4242)
+              </div>
+              <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                Real smart contract execution via ethers.js • Direct interaction with TempoFlowRouter & TempoPayrollStream
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            {!connectedAddress ? (
+              <>
+                <button
+                  onClick={connectWallet}
+                  className="btn-primary"
+                  style={{ fontSize: '0.8rem', padding: '6px 12px' }}
+                >
+                  Connect Wallet
+                </button>
+                <button
+                  onClick={addTempoNetworkToMetamask}
+                  className="btn-secondary"
+                  style={{ fontSize: '0.8rem', padding: '6px 12px', borderColor: 'rgba(0, 240, 255, 0.4)', color: 'var(--tempo-cyan)' }}
+                >
+                  + Add Tempo L1 to MetaMask
+                </button>
+              </>
+            ) : (
+              <>
+                <div style={{
+                  padding: '4px 10px',
+                  borderRadius: '6px',
+                  background: 'rgba(0, 210, 106, 0.15)',
+                  border: '1px solid var(--tempo-emerald)',
+                  fontSize: '0.75rem',
+                  fontFamily: 'var(--font-mono)',
+                  color: 'var(--tempo-emerald)',
+                }}>
+                  {connectedAddress.slice(0, 6)}...{connectedAddress.slice(-4)}
+                </div>
+                <button
+                  onClick={() => mintTestnetFaucet('USDC')}
+                  className="btn-secondary"
+                  style={{ fontSize: '0.78rem', padding: '6px 10px', color: 'var(--tempo-emerald)', borderColor: 'rgba(0, 210, 106, 0.3)' }}
+                >
+                  🚰 Mint 1,000 USDC Faucet
+                </button>
+                <button
+                  onClick={() => mintTestnetFaucet('EURC')}
+                  className="btn-secondary"
+                  style={{ fontSize: '0.78rem', padding: '6px 10px', color: 'var(--tempo-cyan)', borderColor: 'rgba(0, 240, 255, 0.3)' }}
+                >
+                  🚰 Mint 1,000 EURC
+                </button>
+                <a
+                  href="https://explorer.testnet.tempo.xyz"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary"
+                  style={{ fontSize: '0.78rem', padding: '6px 10px', color: 'var(--text-muted)' }}
+                >
+                  Explorer ↗
+                </a>
+              </>
+            )}
+          </div>
+        </div>
       </div>
     );
   }

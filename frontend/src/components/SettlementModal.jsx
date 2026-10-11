@@ -99,18 +99,54 @@ export function SettlementModal() {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-subtle)', paddingTop: '10px' }}>
-            <span style={{ color: 'var(--text-muted)' }}>Network Speed:</span>
-            <span style={{ color: 'var(--tempo-emerald)', fontWeight: 600 }}>0.62s Sub-Second Finality</span>
+            <span style={{ color: 'var(--text-muted)' }}>Network Finality:</span>
+            <span style={{ color: 'var(--tempo-emerald)', fontWeight: 600 }}>
+              {activeReceipt.isOnChain ? '⚡ Confirmed On-Chain (0.62s)' : '0.62s Sub-Second Finality'}
+            </span>
           </div>
+
+          {activeReceipt.explorerUrl && (
+            <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid var(--border-subtle)', textAlign: 'center' }}>
+              <a
+                href={activeReceipt.explorerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: 'var(--tempo-cyan)',
+                  textDecoration: 'none',
+                  fontSize: '0.78rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontWeight: 600,
+                }}
+              >
+                Inspect On Tempo Block Explorer <ExternalLink size={12} />
+              </a>
+            </div>
+          )}
         </div>
 
-        <button
-          onClick={closeReceipt}
-          className="btn-primary"
-          style={{ width: '100%', justifyContent: 'center' }}
-        >
-          Close Receipt
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {activeReceipt.explorerUrl && (
+            <a
+              href={activeReceipt.explorerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary"
+              style={{ flex: 1, justifyContent: 'center', textDecoration: 'none', fontSize: '0.88rem' }}
+            >
+              Explorer ↗
+            </a>
+          )}
+          <button
+            onClick={closeReceipt}
+            className="btn-primary"
+            style={{ flex: 1, justifyContent: 'center' }}
+          >
+            Close Receipt
+          </button>
+        </div>
       </div>
     </div>
   );

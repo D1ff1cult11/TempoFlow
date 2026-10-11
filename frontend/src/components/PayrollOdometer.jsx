@@ -4,12 +4,13 @@ import { Timer, ArrowDownCircle, Download, FastForward, CheckCircle2, TrendingUp
 
 export function PayrollOdometer() {
   const {
+    isJudgeMode,
     streamClaimableBalance,
     streamTotalAccrued,
     streamRemainingEscrow,
     streamRatePerSecond,
     streamEmployeeAddress,
-    simulateClaimSalary,
+    claimSalary,
     simulateTimeWarp,
   } = useTempoStore();
 
@@ -158,13 +159,23 @@ export function PayrollOdometer() {
       {/* Action Buttons */}
       <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
         <button
-          onClick={simulateClaimSalary}
+          onClick={claimSalary}
           disabled={streamClaimableBalance <= 0}
           className="btn-primary"
-          style={{ flex: 2, justifyContent: 'center', padding: '14px 20px', fontSize: '1rem' }}
+          style={{
+            flex: 2,
+            justifyContent: 'center',
+            padding: '14px 20px',
+            fontSize: '1rem',
+            background: !isJudgeMode ? 'linear-gradient(135deg, #00D26A 0%, #00F0FF 100%)' : undefined,
+            color: !isJudgeMode ? '#07090E' : undefined,
+            fontWeight: 700,
+          }}
         >
           <ArrowDownCircle size={20} />
-          Claim Earned Salary (${streamClaimableBalance.toFixed(2)})
+          {!isJudgeMode
+            ? `⚡ Withdraw Salary On-Chain ($${streamClaimableBalance.toFixed(2)})`
+            : `Claim Earned Salary ($${streamClaimableBalance.toFixed(2)})`}
         </button>
 
         <button

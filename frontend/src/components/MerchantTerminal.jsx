@@ -10,11 +10,14 @@ export function MerchantTerminal() {
   const qrCanvasRef = useRef(null);
 
   const {
+    isJudgeMode,
+    connectedAddress,
+    connectWallet,
+    executePayment,
     merchantVaultUSDC,
     merchantVaultEURC,
     selectedSettleCurrency,
     setSelectedSettleCurrency,
-    simulateSolanaPayment,
     relayerStep,
     transactions,
   } = useTempoStore();
@@ -230,16 +233,43 @@ export function MerchantTerminal() {
           </div>
         </div>
 
-        {/* 1-Click Pay Simulation Trigger */}
-        <button
-          onClick={() => simulateSolanaPayment(parseFloat(posAmount) || 50)}
-          disabled={relayerStep !== 'IDLE'}
-          className="btn-primary"
-          style={{ width: '100%', justifyContent: 'center', padding: '12px' }}
-        >
-          <Zap size={18} />
-          {relayerStep === 'IDLE' ? `Simulate Customer Paying $${posAmount} (0.6s Finality)` : 'Settling on Tempo L1...'}
-        </button>
+        {/* Pay Action Trigger (Dynamic: Live Web3 on-chain vs Demo sandbox) */}
+        {!isJudgeMode && !connectedAddress ? (
+          <button
+            onClick={connectWallet}
+            className="btn-action-solana"
+            style={{ width: '100%', justifyContent: 'center', padding: '12px' }}
+          >
+            <Zap size={18} />
+            Connect Web3 Wallet to Pay on Tempo L1
+          </button>
+        ) : (
+          <button
+            onClick={() => executePayment(parseFloat(posAmount) || 50)}
+            disabled={relayerStep !== 'IDLE'}
+            className="btn-primary"
+            style={{
+              width: '100%',
+              justifyContent: 'center',
+              padding: '12px',
+              background: !isJudgeMode ? 'linear-gradient(135deg, #00D26A 0%, #00F0FF 100%)' : undefined,
+              color: !isJudgeMode ? '#07090E' : undefined,
+              fontWeight: 700,
+            }}
+          >
+            <Zap size={18} />
+            {relayerStep !== 'IDLE'
+              ? 'Broadcasting to Tempo L1 (0.6s Lane)...'
+              : !isJudgeMode
+              ? `⚡ Execute $${posAmount} Payment On-Chain (Tempo L1)`
+              : `Simulate Customer Paying $${posAmount} (Demo Sandbox)`}
+          </button>
+        )}
+        <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textAlign: 'center', marginTop: '6px' }}>
+          {!isJudgeMode
+            ? '⚡ Live Mode: Real on-chain transaction calling TempoFlowRouter.sol • 10 bps fee'
+            : '⭐ Demo Mode: 0.6s visual simulation with synthesized audio chime & receipt'}
+        </div>
       </div>
 
       {/* Card 2: Merchant Settlement Treasury & Real-time Live Ticker */}
