@@ -38,3 +38,7 @@ note-driven-agentic-coding-workflow/
 docs/07_AI_HARNESS_SETUP_AND_INKDROP_WORKFLOW.md
 openscreen/
 
+
+videos/
+assets/video/*.jpg
+assets/video/*.webm
